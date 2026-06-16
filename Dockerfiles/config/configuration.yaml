@@ -1,0 +1,100 @@
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+python_script:
+
+modbus:
+  - name: RS485_bridge
+    type: serial
+    port: /dev/serial/by-id/usb-1a86_USB2.0-Ser_-if00-port0
+    baudrate: 19200
+    bytesize: 8
+    method: rtu
+    parity: N
+    stopbits: 2
+    timeout: 3
+
+    binary_sensors:
+      - name: Input 0
+        slave: 247
+        input_type: discrete_input
+        address: 0
+        scan_interval: 10
+
+      - name: Input 1
+        slave: 247
+        input_type: discrete_input
+        address: 1
+        scan_interval: 10
+
+      - name: Input 2
+        slave: 247
+        input_type: discrete_input
+        address: 2
+        scan_interval: 10
+
+    switches:
+      - name: Output 3
+        slave: 247
+        address: 3
+        scan_interval: 10
+
+      - name: Output 4
+        slave: 247
+        address: 4
+        scan_interval: 10
+
+      - name: SPI 0 write
+        slave: 247
+        address: 5
+        scan_interval: 0
+
+      - name: I2C 0 write
+        slave: 247
+        address: 8
+        scan_interval: 0
+
+    sensors:
+      - name: BMP180
+        slave: 247
+        address: 7
+        input_type: input
+        scan_interval: 0
+      
+      - name: MAX6675
+        slave: 247
+        address: 4
+        input_type: input
+        scale: 0.03125
+        precision: 2
+        unit_of_measurement: "°C"
+        scan_interval: 10
+
+      - name: ACS712_Raw
+        slave: 247
+        address: 0
+        input_type: input
+        unit_of_measurement: "A"
+        scan_interval: 10
+
+template:
+  - sensor:
+      - name: "ACS712"
+        unit_of_measurement: "A"
+        device_class: current
+        state: >
+          {% set raw = states('sensor.acs712_raw') %}
+          {% if raw | is_number %}
+            {{ (((raw | float) - 512) * (5.0 / 1023.0) * 0.066) | round(1) }}
+          {% else %}
+            0
+          {% endif %}
+

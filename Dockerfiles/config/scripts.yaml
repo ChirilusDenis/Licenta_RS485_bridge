@@ -1,0 +1,43 @@
+
+trigger_i2c_read:
+  alias: "Trigger I2C Read"
+  sequence:
+      # cleaning the sensor buffer
+    - action: modbus.write_register
+      data:
+        hub: RS485_bridge
+        slave: 247
+        address: 20
+        value: 0xFFFF
+
+    - action: modbus.write_register
+      data:
+        hub: RS485_bridge
+        slave: 247
+        address: 20
+        value: 0x00F4
+
+    - action: modbus.write_register
+      data:
+        hub: RS485_bridge
+        slave: 247
+        address: 20
+        value: 0x002E
+
+    - action: modbus.write_coil
+      data:
+        hub: RS485_bridge
+        slave: 247
+        address: 8
+        state: true
+
+    - delay:
+        milliseconds: 5
+
+    - action: modbus.write_register
+      data:
+        hub: RS485_bridge
+        slave: 247
+        address: 20
+        value: 0x00F6
+      

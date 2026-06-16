@@ -1,0 +1,14 @@
+
+
+- alias: "Trigger Sensor Read Every 10 Seconds"
+  triggers:
+    - trigger: time_pattern
+      seconds: "/10"
+  actions:
+    - action: script.trigger_i2c_read
+
+    - action: homeassistant.update_entity
+      data:
+        entity_id: sensor.bmp180
+
+    - action: python_script.bmp180
