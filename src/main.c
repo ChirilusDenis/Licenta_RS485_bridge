@@ -70,17 +70,17 @@ const uint16_t UBRR_TABLE[NUM_BAUD_RATES] = {
 // precalculated timeout values for the indicated baudrates
 // equal to 3.5 chars
 const uint16_t OCR1A_TABLE[NUM_BAUD_RATES] = {
-    2000, // 1200
-    1000, // 2400
-    500, // 4800
-    250, // 9600
-    169, // 14400
-    125, // 19200
-    110, // 28800
-    110, // 38400
-    110, // 57600
-    110, // 76800
-    110 // 115200
+    1999, // 1200
+    999, // 2400
+    499, // 4800
+    249, // 9600
+    168, // 14400
+    124, // 19200
+    109, // 28800
+    109, // 38400
+    109, // 57600
+    109, // 76800
+    109 // 115200
 };
 
 ISR(TIMER1_COMPA_vect) {
